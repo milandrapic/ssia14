@@ -110,11 +110,11 @@ public class SecurityConfigBook {
                         .redirectUri("https://www.manning.com/authorized")
                         .scope(OidcScopes.OPENID)
                         // To disable PKCE -> set requireProofKey() to false; default is true
-                        .clientSettings(
-                                ClientSettings.builder()
-                                        .requireProofKey(false)
-                                        .build()
-                        )
+//                        .clientSettings(
+//                                ClientSettings.builder()
+//                                        .requireProofKey(false)
+//                                        .build()
+//                        )
                         .build();
         return new InMemoryRegisteredClientRepository(registeredClient);
     }
