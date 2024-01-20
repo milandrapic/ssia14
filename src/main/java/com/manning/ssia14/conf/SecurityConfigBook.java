@@ -37,6 +37,7 @@ import org.springframework.security.oauth2.server.authorization.web.OAuth2Client
 import org.springframework.security.oauth2.server.authorization.web.OAuth2TokenEndpointFilter;
 import org.springframework.security.oauth2.server.authorization.web.authentication.DelegatingAuthenticationConverter;
 import org.springframework.security.oauth2.server.authorization.web.authentication.OAuth2AuthorizationCodeAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.security.web.SecurityFilterChain;
@@ -78,9 +79,9 @@ public class SecurityConfigBook {
 //        http.csrf().disable();
         http.formLogin(Customizer.withDefaults());
 
-        http.authorizeHttpRequests(
-                c -> c.anyRequest().authenticated()
-        );
+//        http.authorizeHttpRequests(
+//                c -> c.anyRequest().authenticated()
+//        );
 
         return http.build();
     }
@@ -140,6 +141,8 @@ public class SecurityConfigBook {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setUserDetailsService(userDetailsService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
+
+
         return new ProviderManager(daoAuthenticationProvider);
     }
 

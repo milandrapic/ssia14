@@ -1,11 +1,11 @@
 
 package com.manning.ssia14.controller;
 
+import com.manning.ssia14.model.AppUser;
+import com.manning.ssia14.service.AppUserDetailsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -15,9 +15,22 @@ import java.util.Base64;
 @RestController
 public class HomeController {
 
+    @Autowired
+    private AppUserDetailsService appUserDetailsService;
+
+
     @GetMapping("/")
     public String hello(){
         return "hello";
+    }
+
+    @PostMapping("/register_user")
+    public String registerUser(
+            @RequestBody AppUser user
+            ){
+        if(user == null) return "Null User";
+        appUserDetailsService.register(user);
+        return user.getUsername();
     }
 
     @GetMapping("/pkce")
