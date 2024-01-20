@@ -30,6 +30,11 @@ public class AppUserDetailsService implements UserDetailsService {
         return new UserPrincipal(appUser.orElse(null));
     }
 
+    public AppUser loadAppUser(String username) throws UsernameNotFoundException {
+        Optional<AppUser> appUser = appUserJpaRepository.findByUsername(username);
+        return appUser.orElse(null);
+    }
+
     @Transactional
     public AppUser register(AppUser appUser) throws IllegalArgumentException{
         String username = appUser.getUsername();

@@ -24,19 +24,19 @@ public class HomeController {
         return "hello";
     }
 
-//    @PostMapping("/registerUser")
-//    public String registerUser(
-//            @RequestBody AppUser user
-//            ){
-//        System.out.println("hello from register_user");
-//        if(user == null) return "Null User";
-//        appUserDetailsService.register(user);
-//        return user.getUsername();
-//    }
+    @GetMapping("/getUser")
+    public String getUser(){
+        return appUserDetailsService.loadAppUser("test").getRole().name();
+    }
+
     @PostMapping("/registerUser")
-    public String registerUser(){
-        System.out.println("hello from register_user");
-        return "test_user";
+    public String registerUser(
+            @RequestBody AppUser user
+            ){
+        if(user == null) return "Null User";
+//        System.out.println(String.format("Registering User: %s", user.getUsername()));
+        appUserDetailsService.register(user);
+        return user.getUsername();
     }
 
     @GetMapping("/registerUser")

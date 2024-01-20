@@ -76,7 +76,7 @@ public class SecurityConfigBook {
     @Bean
     @Order(2)
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-//        http.csrf().disable();
+        http.csrf().disable();
         http.formLogin(Customizer.withDefaults());
 
 //        http.authorizeHttpRequests(
