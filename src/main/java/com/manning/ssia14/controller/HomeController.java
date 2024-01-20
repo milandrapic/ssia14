@@ -24,13 +24,25 @@ public class HomeController {
         return "hello";
     }
 
-    @PostMapping("/register_user")
-    public String registerUser(
-            @RequestBody AppUser user
-            ){
-        if(user == null) return "Null User";
-        appUserDetailsService.register(user);
-        return user.getUsername();
+//    @PostMapping("/registerUser")
+//    public String registerUser(
+//            @RequestBody AppUser user
+//            ){
+//        System.out.println("hello from register_user");
+//        if(user == null) return "Null User";
+//        appUserDetailsService.register(user);
+//        return user.getUsername();
+//    }
+    @PostMapping("/registerUser")
+    public String registerUser(){
+        System.out.println("hello from register_user");
+        return "test_user";
+    }
+
+    @GetMapping("/registerUser")
+    public String registerUserGet(){
+        System.out.println("hello from register_user");
+        return "test_user";
     }
 
     @GetMapping("/pkce")
@@ -51,7 +63,7 @@ public class HomeController {
                     .withoutPadding()
                     .encodeToString(digested);
 
-            return String.format("Verifier: %s\nChallenge: %s\n", codeVerifier, codeChallenge);
+            return String.format("Verifier: %s\n        |          Challenge: %s\n", codeVerifier, codeChallenge);
         }
         catch(Exception e) {
             return "error";

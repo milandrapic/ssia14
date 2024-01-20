@@ -4,14 +4,18 @@ import com.manning.ssia14.model.AppUser;
 import com.manning.ssia14.model.Role;
 import com.manning.ssia14.model.UserPrincipal;
 import com.manning.ssia14.repository.AppUserJpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Transactional
+@Service
 public class AppUserDetailsService implements UserDetailsService {
 
     @Autowired
@@ -26,6 +30,7 @@ public class AppUserDetailsService implements UserDetailsService {
         return new UserPrincipal(appUser.orElse(null));
     }
 
+    @Transactional
     public AppUser register(AppUser appUser) throws IllegalArgumentException{
         String username = appUser.getUsername();
         Optional<AppUser> userOptional = appUserJpaRepository.findByUsername(username);
