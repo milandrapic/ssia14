@@ -19,8 +19,6 @@ public class AppScope {
     @Column
     private String scope;
 
-
-
     @ManyToOne
     private AppClient client;
 

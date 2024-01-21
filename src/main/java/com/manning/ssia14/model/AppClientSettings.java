@@ -5,6 +5,7 @@ import org.springframework.security.oauth2.jose.jws.JwsAlgorithm;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
+import org.springframework.security.oauth2.server.authorization.settings.ConfigurationSettingNames;
 
 @Entity
 @Table(name = "app_client_settings")
@@ -15,15 +16,22 @@ public class AppClientSettings {
     @Column(name = "id")
     private int id;
     @Column(name = "require_proof_key")
-    private boolean requireProofKey;
+    private boolean requireProofKey = false;
     @Column(name = "require_authorization_consent")
-    private boolean requireAuthorizationConsent;
+    private boolean requireAuthorizationConsent = false;
     @Column(name = "jwk_set_url")
-    private String jwkSetUrl;
+    private String jwkSetUrl = ConfigurationSettingNames.AuthorizationServer.JWK_SET_ENDPOINT; // TODO
     @Column(name = "authentication_signing_algorithm")
-    private String authenticationSigningAlgorithm;
+    private String authenticationSigningAlgorithm = ConfigurationSettingNames.Token.ID_TOKEN_SIGNATURE_ALGORITHM; // TODO
     @OneToOne
     private AppClient client;
+
+    public AppClientSettings(AppClient client) {
+        this.client = client;
+    }
+
+    public AppClientSettings() {
+    }
 
     public boolean isRequireProofKey() {
         return requireProofKey;
@@ -55,6 +63,20 @@ public class AppClientSettings {
 
     public void setAuthenticationSigningAlgorithm(String authenticationSigningAlgorithm) {
         this.authenticationSigningAlgorithm = authenticationSigningAlgorithm;
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "AppClientSettings{" +
+                "id=" + id +
+                ", requireProofKey=" + requireProofKey +
+                ", requireAuthorizationConsent=" + requireAuthorizationConsent +
+                ", jwkSetUrl='" + jwkSetUrl + '\'' +
+                ", authenticationSigningAlgorithm='" + authenticationSigningAlgorithm + '\'' +
+                ", client=" + client.getClientId() +
+                '}';
     }
 
     public AppClient getClient() {

@@ -19,15 +19,22 @@ public class AppTokenSettings {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private int id;
-    private Duration authorizationCodeTimeToLive;
-    private Duration accessTokenTimeToLive;
-    private String accessTokenFormat;
-    private Duration deviceCodeTimeToLive;
-    private boolean reuseRefreshTokens;
-    private Duration refreshTokenTimeToLive;
-    private String idTokenSignatureAlgorithm;
+    private Duration authorizationCodeTimeToLive = Duration.ofMinutes(5);
+    private Duration accessTokenTimeToLive = Duration.ofMinutes(5);
+    private String accessTokenFormat = OAuth2TokenFormat.SELF_CONTAINED.getValue();
+    private Duration deviceCodeTimeToLive = Duration.ofMinutes(5);
+    private boolean reuseRefreshTokens = true;
+    private Duration refreshTokenTimeToLive = Duration.ofMinutes(5);
+    private String idTokenSignatureAlgorithm = SignatureAlgorithm.RS256.getName();
     @OneToOne
     private AppClient client;
+
+    public AppTokenSettings(AppClient client) {
+        this.client = client;
+    }
+
+    public AppTokenSettings(){
+    }
 
     public Duration getAuthorizationCodeTimeToLive() {
         return authorizationCodeTimeToLive;
@@ -85,6 +92,21 @@ public class AppTokenSettings {
         this.idTokenSignatureAlgorithm = idTokenSignatureAlgorithm;
     }
 
+    @Override
+    public String toString() {
+        return "AppTokenSettings{" +
+                "id=" + id +
+                ", authorizationCodeTimeToLive=" + authorizationCodeTimeToLive +
+                ", accessTokenTimeToLive=" + accessTokenTimeToLive +
+                ", accessTokenFormat='" + accessTokenFormat + '\'' +
+                ", deviceCodeTimeToLive=" + deviceCodeTimeToLive +
+                ", reuseRefreshTokens=" + reuseRefreshTokens +
+                ", refreshTokenTimeToLive=" + refreshTokenTimeToLive +
+                ", idTokenSignatureAlgorithm='" + idTokenSignatureAlgorithm + '\'' +
+                ", client=" + client.getClientId() +
+                '}';
+    }
+
     public AppClient getClient() {
         return client;
     }
@@ -106,7 +128,7 @@ public class AppTokenSettings {
     }
 
     public static AppTokenSettings toAppTokenSettings(TokenSettings tokenSettings, AppClient client){
-        AppTokenSettings appTokenSettings = new AppTokenSettings();
+        AppTokenSettings appTokenSettings = new AppTokenSettings(client);
         appTokenSettings.setAuthorizationCodeTimeToLive(tokenSettings.getAuthorizationCodeTimeToLive());
         appTokenSettings.setAccessTokenTimeToLive(tokenSettings.getAccessTokenTimeToLive());
         appTokenSettings.setAccessTokenFormat(tokenSettings.getAccessTokenFormat().getValue());
@@ -114,7 +136,7 @@ public class AppTokenSettings {
         appTokenSettings.setReuseRefreshTokens(tokenSettings.isReuseRefreshTokens());
         appTokenSettings.setRefreshTokenTimeToLive(tokenSettings.getRefreshTokenTimeToLive());
         appTokenSettings.setIdTokenSignatureAlgorithm(tokenSettings.getIdTokenSignatureAlgorithm().getName());
-        appTokenSettings.setClient(client);
+
 
         return appTokenSettings;
     }

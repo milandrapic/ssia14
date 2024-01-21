@@ -3,12 +3,16 @@ package com.manning.ssia14.model;
 import jakarta.persistence.*;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
+import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
 
 import java.time.Instant;
+import java.time.InstantSource;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -18,6 +22,12 @@ import java.util.stream.Collectors;
 @Table(name = "client", uniqueConstraints = {@UniqueConstraint(columnNames = {"client_id"})})
 public class AppClient {
 
+    private Set<AppScope> clientAuthMethods = new HashSet<>(
+            List.of(
+                    new AppScope[]{
+                            new AppScope(OidcScopes.OPENID, this)
+                    })
+    );
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -25,27 +35,52 @@ public class AppClient {
     @Column(name = "client_id")
     private String clientId;
     @Column
-    private Instant clientIdIssuedAt;
+    private Instant clientIdIssuedAt = Instant.now();
     @Column
     private String clientSecret;
     @Column
-    private Instant clientSecretExpiresAt;
+    private Instant clientSecretExpiresAt = null;
     @Column
     private String clientName;
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
-    private Set<AppClientAuthenticationMethod> clientAuthenticationMethods;
+    private Set<AppClientAuthenticationMethod> clientAuthenticationMethods = new HashSet<>(
+            List.of(
+                    new AppClientAuthenticationMethod[]{
+                            new AppClientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC.getValue(), this)
+                    })
+    );
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
-    private Set<GrantType> grantTypes;
+    private Set<GrantType> grantTypes = new HashSet<>(
+            List.of(
+                    new GrantType[]{
+                            new GrantType(AuthorizationGrantType.AUTHORIZATION_CODE.getValue(), this)
+                    })
+    );
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
-    private Set<RedirectUri> redirectUris;
+    private Set<RedirectUri> redirectUris = new HashSet<>(
+            List.of(
+                    new RedirectUri[]{
+                            new RedirectUri("http://localhost:8080",false, this)
+                    })
+    );
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
-    private Set<RedirectUri> postLogoutRedirectUris;
+    private Set<RedirectUri> postLogoutRedirectUris = new HashSet<>(
+            List.of(
+                    new RedirectUri[]{
+                            new RedirectUri("http://localhost:8080/pkce",true, this)
+                    })
+    );
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
-    private Set<AppScope> scopes;
+    private Set<AppScope> scopes = new HashSet<>(
+            List.of(
+                    new AppScope[]{
+                            new AppScope(OidcScopes.OPENID, this)
+                    })
+    );
     @OneToOne
-    private AppClientSettings clientSettings;
+    private AppClientSettings clientSettings = new AppClientSettings(this);
     @OneToOne
-    private AppTokenSettings tokenSettings;
+    private AppTokenSettings tokenSettings = new AppTokenSettings(this);
 
     public String getClientId() {
         return clientId;
@@ -144,8 +179,24 @@ public class AppClient {
         this.tokenSettings = tokenSettings;
     }
 
-
-
+    @Override
+    public String toString() {
+        return "AppClient{" +
+                "id=" + id +
+                ", clientId='" + clientId + '\'' +
+                ", clientIdIssuedAt=" + clientIdIssuedAt +
+                ", clientSecret='" + clientSecret + '\'' +
+                ", clientSecretExpiresAt=" + clientSecretExpiresAt +
+                ", clientName='" + clientName + '\'' +
+                ", clientAuthenticationMethods=" + clientAuthenticationMethods +
+                ", grantTypes=" + grantTypes +
+                ", redirectUris=" + redirectUris +
+                ", postLogoutRedirectUris=" + postLogoutRedirectUris +
+                ", scopes=" + scopes +
+                ", clientSettings=" + clientSettings +
+                ", tokenSettings=" + tokenSettings +
+                '}';
+    }
 
     public static RegisteredClient fromClient(AppClient client){
 

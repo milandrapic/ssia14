@@ -1,7 +1,9 @@
 
 package com.manning.ssia14.controller;
 
+import com.manning.ssia14.model.AppClient;
 import com.manning.ssia14.model.AppUser;
+import com.manning.ssia14.service.AppRegisteredClientRepository;
 import com.manning.ssia14.service.AppUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,9 @@ public class HomeController {
 
     @Autowired
     private AppUserDetailsService appUserDetailsService;
+
+    @Autowired
+    private AppRegisteredClientRepository appRegisteredClientRepository;
 
 
     @GetMapping("/")
@@ -37,6 +42,18 @@ public class HomeController {
 //        System.out.println(String.format("Registering User: %s", user.getUsername()));
         appUserDetailsService.register(user);
         return user.getUsername();
+    }
+
+    @PostMapping("/registerClient")
+    public String registerClient(
+            @RequestBody AppClient client
+    ){
+        if(client == null) return "Null User";
+        System.err.println(client.toString());
+
+//        System.out.println(String.format("Registering User: %s", user.getUsername()));
+        appRegisteredClientRepository.save(AppClient.fromClient(client));
+        return "Client Saved";
     }
 
     @GetMapping("/registerUser")
