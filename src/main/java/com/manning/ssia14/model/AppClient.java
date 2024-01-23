@@ -22,12 +22,6 @@ import java.util.stream.Collectors;
 @Table(name = "client", uniqueConstraints = {@UniqueConstraint(columnNames = {"client_id"})})
 public class AppClient {
 
-    private Set<AppScope> clientAuthMethods = new HashSet<>(
-            List.of(
-                    new AppScope[]{
-                            new AppScope(OidcScopes.OPENID, this)
-                    })
-    );
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -77,10 +71,14 @@ public class AppClient {
                             new AppScope(OidcScopes.OPENID, this)
                     })
     );
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private AppClientSettings clientSettings = new AppClientSettings(this);
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private AppTokenSettings tokenSettings = new AppTokenSettings(this);
+
+    public int getId() {
+        return id;
+    }
 
     public String getClientId() {
         return clientId;
@@ -200,7 +198,8 @@ public class AppClient {
 
     public static RegisteredClient fromClient(AppClient client){
 
-        return RegisteredClient.withId(client.getClientId())
+        return RegisteredClient.withId(String.valueOf(client.getId()))
+                .clientId(client.getClientId())
                 .clientIdIssuedAt(client.getClientIdIssuedAt())
                 .clientSecret(client.getClientSecret())
                 .clientSecretExpiresAt(client.getClientSecretExpiresAt())

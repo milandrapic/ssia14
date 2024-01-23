@@ -20,9 +20,9 @@ public class AppClientSettings {
     @Column(name = "require_authorization_consent")
     private boolean requireAuthorizationConsent = false;
     @Column(name = "jwk_set_url")
-    private String jwkSetUrl = ConfigurationSettingNames.AuthorizationServer.JWK_SET_ENDPOINT; // TODO
+    private String jwkSetUrl = "http://localhost:8080/oauth2/jwks"; // TODO
     @Column(name = "authentication_signing_algorithm")
-    private String authenticationSigningAlgorithm = ConfigurationSettingNames.Token.ID_TOKEN_SIGNATURE_ALGORITHM; // TODO
+    private String authenticationSigningAlgorithm = SignatureAlgorithm.RS256.getName(); // TODO
     @OneToOne
     private AppClient client;
 
