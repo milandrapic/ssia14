@@ -33,6 +33,7 @@ import org.springframework.security.oauth2.server.authorization.config.annotatio
 import org.springframework.security.oauth2.server.authorization.settings.AuthorizationServerSettings;
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.web.NimbusJwkSetEndpointFilter;
+import org.springframework.security.oauth2.server.authorization.web.OAuth2AuthorizationEndpointFilter;
 import org.springframework.security.oauth2.server.authorization.web.OAuth2ClientAuthenticationFilter;
 import org.springframework.security.oauth2.server.authorization.web.OAuth2TokenEndpointFilter;
 import org.springframework.security.oauth2.server.authorization.web.authentication.DelegatingAuthenticationConverter;
@@ -86,15 +87,15 @@ public class SecurityConfigBook {
         return http.build();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService(){
-        UserDetails userDetails = User.withUsername("bill")
-                .password("password")
-                .roles("USER")
-                .build();
-
-        return new InMemoryUserDetailsManager(userDetails);
-    }
+//    @Bean
+//    public UserDetailsService userDetailsService(){
+//        UserDetails userDetails = User.withUsername("bill")
+//                .password("password")
+//                .roles("USER")
+//                .build();
+//
+//        return new InMemoryUserDetailsManager(userDetails);
+//    }
 
 
     @Bean
@@ -145,7 +146,6 @@ public class SecurityConfigBook {
 
         return new ProviderManager(daoAuthenticationProvider);
     }
-
     // This is the "JSON WEB KEY SOURCE"
     @Bean
     public JWKSource<SecurityContext> jwkSource() throws NoSuchAlgorithmException{
