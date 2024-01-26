@@ -80,9 +80,9 @@ public class SecurityConfigBook {
         http.csrf().disable();
         http.formLogin(Customizer.withDefaults());
 
-//        http.authorizeHttpRequests(
-//                c -> c.anyRequest().authenticated()
-//        );
+        http.authorizeHttpRequests(
+                c -> c.anyRequest().authenticated()
+        );
 
         return http.build();
     }
