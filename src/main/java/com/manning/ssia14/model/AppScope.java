@@ -11,6 +11,9 @@ public class AppScope {
         this.client = client;
     }
 
+    public AppScope() {
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")

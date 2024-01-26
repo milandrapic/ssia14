@@ -11,6 +11,9 @@ public class AppClientAuthenticationMethod {
         this.client = client;
     }
 
+    public AppClientAuthenticationMethod() {
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")

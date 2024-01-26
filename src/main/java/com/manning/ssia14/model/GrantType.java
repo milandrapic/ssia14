@@ -11,6 +11,9 @@ public class GrantType {
         this.client = client;
     }
 
+    public GrantType() {
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")

@@ -36,35 +36,35 @@ public class AppClient {
     private Instant clientSecretExpiresAt = null;
     @Column
     private String clientName;
-    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<AppClientAuthenticationMethod> clientAuthenticationMethods = new HashSet<>(
             List.of(
                     new AppClientAuthenticationMethod[]{
                             new AppClientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC.getValue(), this)
                     })
     );
-    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<GrantType> grantTypes = new HashSet<>(
             List.of(
                     new GrantType[]{
                             new GrantType(AuthorizationGrantType.AUTHORIZATION_CODE.getValue(), this)
                     })
     );
-    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<RedirectUri> redirectUris = new HashSet<>(
             List.of(
                     new RedirectUri[]{
                             new RedirectUri("http://localhost:8080",false, this)
                     })
     );
-    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<RedirectUri> postLogoutRedirectUris = new HashSet<>(
             List.of(
                     new RedirectUri[]{
                             new RedirectUri("http://localhost:8080/pkce",true, this)
                     })
     );
-    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<AppScope> scopes = new HashSet<>(
             List.of(
                     new AppScope[]{

@@ -3,6 +3,7 @@ package com.manning.ssia14.service;
 import com.manning.ssia14.model.AppClient;
 import com.manning.ssia14.repository.AppClientJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.stereotype.Component;
@@ -18,12 +19,17 @@ public class AppRegisteredClientRepository implements RegisteredClientRepository
     @Autowired
     private AppClientJpaRepository appClientRepository;
 
+    @Autowired
+    private PasswordEncoder bcrypt;
+
     @Transactional
     @Override
     public void save(RegisteredClient registeredClient) {
         AppClient appClient = loadAppClientByClientId(registeredClient.getClientId());
         if(appClient == null){
-            appClientRepository.save(AppClient.toClient(registeredClient));
+            AppClient c = AppClient.toClient(registeredClient);
+            c.setClientSecret(bcrypt.encode(registeredClient.getClientSecret()));
+            appClientRepository.save(c);
         }
     }
 

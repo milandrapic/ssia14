@@ -11,6 +11,13 @@ import org.springframework.security.oauth2.server.authorization.settings.Configu
 @Table(name = "app_client_settings")
 public class AppClientSettings {
 
+    public AppClientSettings(AppClient client) {
+        this.client = client;
+    }
+
+    public AppClientSettings() {
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -26,12 +33,7 @@ public class AppClientSettings {
     @OneToOne
     private AppClient client;
 
-    public AppClientSettings(AppClient client) {
-        this.client = client;
-    }
 
-    public AppClientSettings() {
-    }
 
     public boolean isRequireProofKey() {
         return requireProofKey;

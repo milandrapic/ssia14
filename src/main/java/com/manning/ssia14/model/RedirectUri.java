@@ -12,6 +12,9 @@ public class RedirectUri {
         this.client = client;
     }
 
+    public RedirectUri() {
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")

@@ -15,6 +15,13 @@ import java.time.Duration;
 @Table(name = "app_token_settings")
 public class AppTokenSettings {
 
+    public AppTokenSettings(AppClient client) {
+        this.client = client;
+    }
+
+    public AppTokenSettings(){
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -29,12 +36,7 @@ public class AppTokenSettings {
     @OneToOne
     private AppClient client;
 
-    public AppTokenSettings(AppClient client) {
-        this.client = client;
-    }
 
-    public AppTokenSettings(){
-    }
 
     public Duration getAuthorizationCodeTimeToLive() {
         return authorizationCodeTimeToLive;
